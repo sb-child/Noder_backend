@@ -20,6 +20,7 @@ from typing import Union
 import redis
 import asyncio
 import websockets
+import socketio
 import nd_utils
 import re
 import nd_msg
