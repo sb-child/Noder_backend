@@ -4,7 +4,7 @@ It is a server for clients(frontend).
 **todo:**  
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
-> - [ ] replace `WebSocket` to `socket.io`  
+> - [x] replace `WebSocket` to `socket.io`  
 > - [ ] use `socket.io` to manage users  
 > ...
 > - [ ] code cleanup
