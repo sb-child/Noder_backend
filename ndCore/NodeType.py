@@ -39,7 +39,11 @@ class ImageLayer:
     def __init__(self):
         self.__size = torch.Size([0, 0])
         self.im_tensor = torch.zeros(self.__size)
-        self.__color_mode = "rgb"
+        self.__color_mode: str = ""
+        self.__color_mode_setting: dict = {}
+
+    def _set_mode(self, mode: str):
+        self.__color_mode = mode
         self.__color_mode_setting = ColorModes.getMode(self.__color_mode)
 
     def resize(self, sz: torch.Size):

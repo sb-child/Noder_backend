@@ -19,17 +19,27 @@
 from typing import Union
 import redis
 import asyncio
-import websockets
+# import websockets
 import socketio
 import nd_utils
 import re
 import nd_msg
+import aiohttp.web
 
 
 class SrvSocket:
     def __init__(self, redis_host: Union[list, tuple], host: Union[list, tuple]):
+        # connect to redis
         self.redis_cli = redis.StrictRedis(host=redis_host[0], port=redis_host[1])
-        self.skt = websockets.serve(self._recv, host[0], host[1])
+        # init socket.io
+        self.sio_mgr = socketio.AsyncRedisManager(f'redis://{redis_host[0]}:{redis_host[1]}')
+        self.skt = socketio.AsyncServer(async_mode='aiohttp',
+                                        client_manager=self.sio_mgr,
+                                        ping_timeout=3,
+                                        ping_interval=5)
+        self.skt_AsgiApp = aiohttp.web.Application()
+        self.skt.attach(self.skt_AsgiApp)
+
         self.host = host
         self.r_host = redis_host
         self.id = nd_utils.getRandomUuid()
@@ -43,6 +53,10 @@ class SrvSocket:
             "send_id": re.compile(self._front["send"] + ":([0-9a-zA-z]{8})").findall,
         }
         self.mConv = nd_msg.MsgConverter(self.id)
+        # socket.io events
+        self.skt.on("connect", self._conn)
+        self.skt.on("disconnect", self._disConn)
+        self.skt.on("message", self._message)
 
     def _put_op(self, op_str: str, timeout=10):
         self.redis_cli.set(f"{self._front['op']}:{nd_utils.getTime()}", op_str, timeout)
@@ -97,37 +111,48 @@ class SrvSocket:
             return []
         return [uid, nm]
 
-    async def _recv(self, websocket: websockets.WebSocketServerProtocol, path: str):
-        print(path)
-        websocket.close_timeout = 1
-        websocket.ping_timeout = 1
-        while True:
-            try:
-                data = await websocket.recv()
-            except websockets.ConnectionClosed:
-                print("closed")
-                break
-            if isinstance(data, str):
-                print(path, data)
-                r = self.mConv.conv(path, data)
-                if r is None:
-                    continue
-                if r["cli_type"] == "greeter":
-                    if r["op"] == "get_user":
-                        result = self._add_user(f"user_{nd_utils.getRandomStr(10)}")
-                        await websocket.send(nd_utils.jsonFromDict(
-                            {"code": "ok",
-                             "data": result,
-                             "s_id": self.id}))
-            else:
-                await websocket.close()
-                break
-        # await websocket.send()
-        # self._put_op()
+    def _conn(self, sid, p):
+        print(sid)
+        print(p)
+        pass
+
+    def _disConn(self, sid, p):
+        print(sid)
+        print(p)
+        pass
+
+    async def _message(self, sid, p):
+        print(sid)
+        print(p)
+        # print(path)
+        # websocket.close_timeout = 1
+        # websocket.ping_timeout = 1
+        # while True:
+        #     try:
+        #         data = await websocket.recv()
+        #     except websockets.ConnectionClosed:
+        #         print("closed")
+        #         break
+        #     if isinstance(data, str):
+        #         print(path, data)
+        #         r = self.mConv.conv(path, data)
+        #         if r is None:
+        #             continue
+        #         if r["cli_type"] == "greeter":
+        #             if r["op"] == "get_user":
+        #                 result = self._add_user(f"user_{nd_utils.getRandomStr(10)}")
+        #                 await websocket.send(nd_utils.jsonFromDict(
+        #                     {"code": "ok",
+        #                      "data": result,
+        #                      "s_id": self.id}))
+        #     else:
+        #         await websocket.close()
+        #         break
 
     def run(self):
-        asyncio.get_event_loop().run_until_complete(self.skt)
-        asyncio.get_event_loop().run_forever()
+        aiohttp.web.run_app(self.skt_AsgiApp, host=self.host[0], port=self.host[1])
+        # asyncio.get_event_loop().run_until_complete(self.skt)
+        # asyncio.get_event_loop().run_forever()
 
     def debug(self):
         for i in range(1000):
