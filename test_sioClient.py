@@ -16,36 +16,28 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import socketio
 import asyncio
-import socketio
-import time
 
-from aiohttp import web
-import socketio
-
-sio = socketio.AsyncServer()
-app = web.Application()
-sio.attach(app)
+sio = socketio.Client()
 
 
-@sio.event
-def connect(sid, environ):
-    print("connect ", sid)
+def connect():
+    print('connection established')
 
 
-@sio.event
-async def chat_message(sid, data):
-    print("message ", data)
-    await sio.emit('reply', room=sid)
+def my_message(data):
+    print('message received with ', data)
+    sio.sleep(0.5)
+    sio.send({})
 
 
-@sio.event
-def disconnect(sid):
-    print('disconnect ', sid)
+def disconnect():
+    print('disconnected from server')
 
-
-# app.router.add_static('/static', 'static')
-# app.router.add_get('/', index)
 
 if __name__ == '__main__':
-    web.run_app(app)
+    sio.on("connect", connect)
+    sio.on("message", my_message)
+    sio.on("disconnect", disconnect)
+    sio.connect('http://0.0.0.0:37321')
