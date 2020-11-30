@@ -51,3 +51,21 @@ class ImageLayer:
 
     def convertMode(self, target: str):
         pass
+
+
+class RGBImageLayer(ImageLayer):
+    # RGB图层
+    def __init__(self):
+        super().__init__()
+
+
+class CMYKImageLayer(ImageLayer):
+    # CMYK图层
+    def __init__(self):
+        super().__init__()
+
+
+class LabImageLayer(ImageLayer):
+    # Lab图层
+    def __init__(self):
+        super().__init__()
