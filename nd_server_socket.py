@@ -49,6 +49,10 @@ class SrvSocket:
         self.skt.on("connect", self._conn)
         self.skt.on("disconnect", self._disConn)
         self.skt.on("message", self._message)
+        """
+        todo :
+        
+        """
 
     async def _conn(self, sid, p):
         print("connect:")

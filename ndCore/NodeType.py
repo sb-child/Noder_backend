@@ -34,6 +34,20 @@ class SizeNd:
     #     pass
 
 
+class Image:
+    # 图像
+    def __init__(self, width: int, height: int, channel: int):
+        self.im_array = torch.zeros([width, height, channel])
+        pass
+
+
+class RGBImage(Image):
+    def __init__(self, width: int, height: int):
+        super().__init__(width, height, 4)
+        # RGBA
+        # self.im_array = torch.zeros([width, height, 4])
+
+
 class ImageLayer:
     # 图层
     def __init__(self):
