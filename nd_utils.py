@@ -103,7 +103,8 @@ def checkDict(p: list, target: dict):
 
 def main():
     print(getRandomUuid())
-    print(getRandomStr(32))
+    print(getRandomStr(20))
+    print(getRandomStr(20))
     for i in range(10):
         print(getTime())
     print(dirSpilt("/"))

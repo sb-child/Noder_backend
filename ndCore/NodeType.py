@@ -18,6 +18,7 @@ from typing import Union, List
 import torch
 import numpy
 from . import ColorModes
+# todo: Image and ImageLayer types
 
 
 class SizeNd:

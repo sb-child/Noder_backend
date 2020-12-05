@@ -46,15 +46,65 @@ class SrvSocket:
         # command executer
         self.mExec = nd_msg.MsgExec(self.id)
         # socket.io events
-        self.skt.on("connect", self._conn)
-        self.skt.on("disconnect", self._disConn)
-        self.skt.on("message", self._message)
-        """
-        todo :
-        
-        """
+        # greeter
+        self.skt.on("connect", self._greeter_conn, namespace="/greeter")
+        self.skt.on("disconnect", self._greeter_disConn, namespace="/greeter")
+        self.skt.on("message", self._greeter_message, namespace="/greeter")
+        # user
+        self.skt.on("connect", self._user_conn, namespace="/user")
+        self.skt.on("disconnect", self._user_disConn, namespace="/user")
+        self.skt.on("message", self._user_message, namespace="/user")
+        # workspaceManager
+        self.skt.on("connect", self._wsMan_conn, namespace="/wsMan")
+        self.skt.on("disconnect", self._wsMan_disConn, namespace="/wsMan")
+        self.skt.on("message", self._wsMan_message, namespace="/wsMan")
+        # workspace
+        self.skt.on("connect", self._ws_conn, namespace="/ws")
+        self.skt.on("disconnect", self._ws_disConn, namespace="/ws")
+        self.skt.on("message", self._ws_message, namespace="/ws")
 
-    async def _conn(self, sid, p):
+    # -- todo: socket.io events
+    # -- user
+    async def _user_conn(self, sid, p):
+        print("connect")
+        await self.skt.send("hello", sid)
+        pass
+
+    async def _user_disConn(self, sid):
+        print("disconnect")
+        pass
+
+    async def _user_message(self, sid, p: Union[str, bytes, list, dict]):
+        pass
+
+    # -- wsMan
+    async def _wsMan_conn(self, sid, p):
+        print("connect")
+        await self.skt.send("hello", sid)
+        pass
+
+    async def _wsMan_disConn(self, sid):
+        print("disconnect")
+        pass
+
+    async def _wsMan_message(self, sid, p: Union[str, bytes, list, dict]):
+        pass
+
+    # -- workspace
+    async def _ws_conn(self, sid, p):
+        print("connect")
+        await self.skt.send("hello", sid)
+        pass
+
+    async def _ws_disConn(self, sid):
+        print("disconnect")
+        pass
+
+    async def _ws_message(self, sid, p: Union[str, bytes, list, dict]):
+        pass
+
+    # -- greeter
+    async def _greeter_conn(self, sid, p):
         print("connect:")
         print(sid)
         print(p)
@@ -62,13 +112,13 @@ class SrvSocket:
         await self.skt.send("hello", sid)
         pass
 
-    async def _disConn(self, sid):
+    async def _greeter_disConn(self, sid):
         print("disconnect:")
         print(sid)
         print("")
         pass
 
-    async def _message(self, sid, p: Union[str, bytes, list, dict]):
+    async def _greeter_message(self, sid, p: Union[str, bytes, list, dict]):
         print("message:")
         print(sid)
         print(p)
@@ -80,9 +130,11 @@ class SrvSocket:
         self.skt.enter_room(sid, "users")
         self.mExec.executeCmd(p, sid)
 
+    # -- end of socket.io events --
     def run(self):
         def my_print(_):
             pass
+
         print(f"socket.io is running at {self.host[0]}:{self.host[1]}")
         aiohttp.web.run_app(self.skt_AsgiApp,
                             host=self.host[0],
