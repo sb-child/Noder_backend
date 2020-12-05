@@ -18,6 +18,9 @@ from typing import Union, List
 import torch
 import numpy
 from . import ColorModes
+from . import pytorchUtils
+
+
 # todo: Image and ImageLayer types
 
 
@@ -36,17 +39,71 @@ class SizeNd:
 
 
 class Image:
-    # 图像
-    def __init__(self, width: int, height: int, channel: int):
-        self.im_array = torch.zeros([width, height, channel])
+    # Image basic class
+    def __init__(self, width: int, height: int, channel: int, bits: int, device: torch.device):
+        # 16bit, 32bit, 64bit
+        # torch.float16, torch.float32, torch.float64
+        self._types = {16: torch.float16, 32: torch.float32, 64: torch.float64}
+        self.im_array = torch.zeros([width, height, channel], dtype=self._types[bits], device=device)
+        pass
+
+    def fixColor(self):
+        """
+        limit colors of the image to a area\n
+        (inplace operation)
+
+        :return: None
+        """
+        pass
+
+    def resize(self, nw: int, nh: int):
+        """
+        resize the image\n
+        (inplace operation)
+
+        :param nw: new width
+        :param nh: new height
+        :return: None
+        """
+        pass
+
+    def extend(self, top: int, left: int, bottom: int, right: int, color: torch.Tensor):
+        """
+        extend the image with a color\n
+        (inplace operation)
+
+        :param color: a color tensor, example: [128, 128, 200, 50]
+        :param top: extend top pixels
+        :param right: extend right pixels
+        :param bottom: extend bottom pixels
+        :param left: extend left pixels
+        :return: None
+        """
         pass
 
 
 class RGBImage(Image):
-    def __init__(self, width: int, height: int):
-        super().__init__(width, height, 4)
-        # RGBA
-        # self.im_array = torch.zeros([width, height, 4])
+    def __init__(self, width: int, height: int, bits: int, device: torch.device):
+        """
+        RGB image, with Alpha channel
+
+        :param width: image width
+        :param height: image height
+        :param bits: bits per channel
+        :param device: compute device
+        """
+        super().__init__(width, height, 4, bits, device)
+
+    def fixColor(self):
+        super().fixColor()
+        self.im_array[self.im_array < 0] = 0
+        self.im_array[self.im_array > 255] = 255
+
+    def resize(self, nw: int, nh: int):
+        super().resize(nw, nh)
+
+    def extend(self, top: int, left: int, bottom: int, right: int, color: torch.Tensor):
+        super().extend(top, left, bottom, right, color)
 
 
 class ImageLayer:
