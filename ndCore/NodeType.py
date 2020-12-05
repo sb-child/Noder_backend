@@ -65,7 +65,7 @@ class Image:
         :param nh: new height
         :return: None
         """
-        pass
+        self.im_array.resize([nw, nh, self.im_array.shape[2]])
 
     def extend(self, top: int, left: int, bottom: int, right: int, color: torch.Tensor):
         """
@@ -98,6 +98,55 @@ class RGBImage(Image):
         super().fixColor()
         self.im_array[self.im_array < 0] = 0
         self.im_array[self.im_array > 255] = 255
+
+    def resize(self, nw: int, nh: int):
+        super().resize(nw, nh)
+
+    def extend(self, top: int, left: int, bottom: int, right: int, color: torch.Tensor):
+        super().extend(top, left, bottom, right, color)
+
+
+class CMYKImage(Image):
+    def __init__(self, width: int, height: int, bits: int, device: torch.device):
+        """
+        CMYK image, with Alpha channel
+
+        :param width: image width
+        :param height: image height
+        :param bits: bits per channel
+        :param device: compute device
+        """
+        super().__init__(width, height, 5, bits, device)
+
+    def fixColor(self):
+        super().fixColor()
+        self.im_array[self.im_array < 0] = 0
+        self.im_array[self.im_array > 100] = 100
+
+    def resize(self, nw: int, nh: int):
+        super().resize(nw, nh)
+
+    def extend(self, top: int, left: int, bottom: int, right: int, color: torch.Tensor):
+        super().extend(top, left, bottom, right, color)
+
+
+class LabImage(Image):
+    def __init__(self, width: int, height: int, bits: int, device: torch.device):
+        """
+        Lab image, with Alpha channel
+
+        :param width: image width
+        :param height: image height
+        :param bits: bits per channel
+        :param device: compute device
+        """
+        super().__init__(width, height, 4, bits, device)
+
+    def fixColor(self):
+        super().fixColor()
+        for i in zip(range(4), [[0, 100], [-120, 120], [-120, 120], [0, 255]]):
+            self.im_array[:, :, i[0]][self.im_array[:, :, i[0]] < i[1][0]] = i[1][0]
+            self.im_array[:, :, i[0]][self.im_array[:, :, i[0]] > i[1][1]] = i[1][1]
 
     def resize(self, nw: int, nh: int):
         super().resize(nw, nh)
