@@ -13,3 +13,6 @@ It is a server for clients(frontend).
 > - [ ] code cleanup
 > - [ ] improve performance
 > - [ ] document
+
+**License**
+> GPL3
