@@ -8,7 +8,8 @@ It is a server for clients(frontend).
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
 > - [x] replace `WebSocket` to `socket.io`
-> - [ ] use `socket.io` to manage users   
+> - [ ] ~~use `socket.io` to manage users~~   
+> - [ ] communication protocol and user manage  
 > ...
 > - [ ] code cleanup
 > - [ ] improve performance
