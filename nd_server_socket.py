@@ -16,20 +16,19 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Union, Dict
 import redis
 import asyncio
 import socketio
 import nd_utils
 import re
 import nd_msg
+import nd_file_manager
 import aiohttp.web
 
 
 class SrvSocket:
-    def __init__(self, redis_host: str, host: Union[list, tuple]):
-        # connect to redis
-        # self.redis_cli = redis.StrictRedis(host=redis_host[0], port=redis_host[1])
+    def __init__(self, redis_host: str, host: Union[list, tuple], file_db: dict):
         # init socket.io
         # use default manager if redis_host is ""
         self.sio_mgr = socketio.AsyncRedisManager(redis_host) if redis_host != "" else None
@@ -54,14 +53,15 @@ class SrvSocket:
         self.skt.on("connect", self._user_conn, namespace="/user")
         self.skt.on("disconnect", self._user_disConn, namespace="/user")
         self.skt.on("message", self._user_message, namespace="/user")
-        # workspaceManager
-        self.skt.on("connect", self._wsMan_conn, namespace="/wsMan")
-        self.skt.on("disconnect", self._wsMan_disConn, namespace="/wsMan")
-        self.skt.on("message", self._wsMan_message, namespace="/wsMan")
-        # workspace
-        self.skt.on("connect", self._ws_conn, namespace="/ws")
-        self.skt.on("disconnect", self._ws_disConn, namespace="/ws")
-        self.skt.on("message", self._ws_message, namespace="/ws")
+        # worker
+        self.skt.on("connect", self._worker_conn, namespace="/worker")
+        self.skt.on("disconnect", self._worker_disConn, namespace="/worker")
+        self.skt.on("message", self._worker_message, namespace="/worker")
+        # fileManager
+        self.fileDbSettings = file_db
+        self.fMan = nd_file_manager.FileManager(db_host=file_db["host"],
+                                                db_port=file_db["port"],
+                                                db_name=file_db["name"])
 
     # -- todo: socket.io events
     # -- user
@@ -77,30 +77,17 @@ class SrvSocket:
     async def _user_message(self, sid, p: Union[str, bytes, list, dict]):
         pass
 
-    # -- wsMan
-    async def _wsMan_conn(self, sid, p):
+    # -- worker
+    async def _worker_conn(self, sid, p):
         print("connect")
         await self.skt.send("hello", sid)
         pass
 
-    async def _wsMan_disConn(self, sid):
+    async def _worker_disConn(self, sid):
         print("disconnect")
         pass
 
-    async def _wsMan_message(self, sid, p: Union[str, bytes, list, dict]):
-        pass
-
-    # -- workspace
-    async def _ws_conn(self, sid, p):
-        print("connect")
-        await self.skt.send("hello", sid)
-        pass
-
-    async def _ws_disConn(self, sid):
-        print("disconnect")
-        pass
-
-    async def _ws_message(self, sid, p: Union[str, bytes, list, dict]):
+    async def _worker_message(self, sid, p: Union[str, bytes, list, dict]):
         pass
 
     # -- greeter
@@ -146,8 +133,9 @@ class SrvSocket:
 
 
 def main():
-    s = SrvSocket(f'redis://127.0.0.1:6379/1', ("0.0.0.0", 37321))
-    s.run()
+    # s = SrvSocket(f'redis://127.0.0.1:6379/1', ("0.0.0.0", 37321))
+    # s.run()
+    pass
 
 
 if __name__ == '__main__':
