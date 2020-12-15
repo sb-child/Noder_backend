@@ -25,7 +25,10 @@ class FileManager:
         self.db = pymongo.MongoClient(host=db_host, port=db_port)
         self.fileDb = self.db[db_name]["files"]
         """
-        {"name": ""}
+        {"files": [
+            {"name": "...", "path": "...", "workspace": "..."},
+            {"name": "...", "path": "...", "workspace": "..."}
+        ]}
         """
 
 
