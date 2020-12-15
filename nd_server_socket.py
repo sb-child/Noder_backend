@@ -17,18 +17,19 @@
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Union, Dict
-import redis
-import asyncio
 import socketio
+import aiohttp.web
+# import redis
+# import asyncio
+# import re
 import nd_utils
-import re
 import nd_msg
 import nd_file_manager
-import aiohttp.web
+import nd_task_pool
 
 
 class SrvSocket:
-    def __init__(self, redis_host: str, host: Union[list, tuple], file_db: dict):
+    def __init__(self, redis_host: str, host: Union[list, tuple], file_db: Dict):
         # init socket.io
         # use default manager if redis_host is ""
         self.sio_mgr = socketio.AsyncRedisManager(redis_host) if redis_host != "" else None
@@ -62,6 +63,8 @@ class SrvSocket:
         self.fMan = nd_file_manager.FileManager(db_host=file_db["host"],
                                                 db_port=file_db["port"],
                                                 db_name=file_db["name"])
+        # taskPool
+        self.taskPool = nd_task_pool.TaskPool()
 
     # -- todo: socket.io events
     # -- user

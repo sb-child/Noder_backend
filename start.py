@@ -27,8 +27,11 @@ def main():
     db_port: int = sktSettings.read("fileManager", "file_db_port", "int")
     print(f"server starts at {conn_host}:{conn_port}")
     print(f"redis server: {conn_redis}")
-    skt = nd_server_socket.SrvSocket(redis_host=conn_redis, host=[conn_host, conn_port], file_db=None)
-    # todo
+    skt = nd_server_socket.SrvSocket(redis_host=conn_redis,
+                                     host=[conn_host, conn_port],
+                                     file_db={"host": db_host,
+                                              "port": db_port,
+                                              "name": db_name})
     skt.run()
     pass
 

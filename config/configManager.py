@@ -34,7 +34,7 @@ BASIC_socket = {
     },
     "fileManager": {
         "file_dir": "files",
-        "file_db_name": "noder_file_db",
+        "file_db_name": "noder_db",
         "file_db_host": "localhost",
         "file_db_port": 27017,
     },

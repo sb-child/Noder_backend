@@ -1,5 +1,5 @@
 # Noder Backend
-**[isn't done yet] A node-based image/video/audio editor (backend)**  
+**[isn't done yet] A node-based workflow (backend)**  
 It is a server for clients(frontend).  
 **plan:**  
 ![alt](readme_imgs/plan.png)

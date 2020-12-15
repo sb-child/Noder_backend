@@ -14,28 +14,3 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import pymongo
-
-
-class FileManager:
-    def __init__(self, db_host: str, db_port: int, db_name: str):
-        self.db_name = db_name
-        self.db_port = db_port
-        self.db_host = db_host
-        self.db = pymongo.MongoClient(host=db_host, port=db_port)
-        self.fileDb = self.db[db_name]["files"]
-        """
-        {"name": ""}
-        """
-
-
-def main():
-    fm = FileManager("127.0.0.1", 27017, "test1")
-    fm.fileDb.insert_one({"name": "123"})
-    print(list(fm.fileDb.find({})))
-    fm.fileDb.drop()
-    pass
-
-
-if __name__ == '__main__':
-    main()
