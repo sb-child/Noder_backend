@@ -32,11 +32,11 @@ BASIC_socket = {
         "host": "127.0.0.1",
         "port": 37321
     },
-    "fileManager": {
-        "file_dir": "files",
-        "file_db_name": "noder_db",
-        "file_db_host": "localhost",
-        "file_db_port": 27017,
+    "WorkspaceManager": {
+        "file_dir": "ws_files",
+        "db_name": "noder_db",
+        "db_host": "localhost",
+        "db_port": 27017,
     },
 }
 

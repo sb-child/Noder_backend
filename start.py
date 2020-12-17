@@ -22,16 +22,18 @@ def main():
     conn_redis = sktSettings.read("socketIo", "redis_url", "str")
     conn_host = sktSettings.read("socketIo", "host", "str")
     conn_port: int = sktSettings.read("socketIo", "port", "int")
-    db_name = sktSettings.read("fileManager", "file_db_name", "str")
-    db_host = sktSettings.read("fileManager", "file_db_host", "str")
-    db_port: int = sktSettings.read("fileManager", "file_db_port", "int")
+    files_name = sktSettings.read("WorkspaceManager", "file_dir", "str")
+    db_name = sktSettings.read("WorkspaceManager", "db_name", "str")
+    db_host = sktSettings.read("WorkspaceManager", "db_host", "str")
+    db_port: int = sktSettings.read("WorkspaceManager", "db_port", "int")
     print(f"server starts at {conn_host}:{conn_port}")
     print(f"redis server: {conn_redis}")
     skt = nd_server_socket.SrvSocket(redis_host=conn_redis,
                                      host=[conn_host, conn_port],
-                                     file_db={"host": db_host,
-                                              "port": db_port,
-                                              "name": db_name})
+                                     wsm_db={"host": db_host,
+                                             "port": db_port,
+                                             "name": db_name,
+                                             "files": files_name})
     skt.run()
     pass
 

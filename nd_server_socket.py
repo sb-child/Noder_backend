@@ -26,10 +26,11 @@ import nd_utils
 import nd_msg
 import nd_file_manager
 import nd_task_pool
+import nd_workspace_manager
 
 
 class SrvSocket:
-    def __init__(self, redis_host: str, host: Union[list, tuple], file_db: Dict):
+    def __init__(self, redis_host: str, host: Union[list, tuple], wsm_db: Dict):
         # init socket.io
         # use default manager if redis_host is ""
         self.sio_mgr = socketio.AsyncRedisManager(redis_host) if redis_host != "" else None
@@ -58,11 +59,13 @@ class SrvSocket:
         self.skt.on("connect", self._worker_conn, namespace="/worker")
         self.skt.on("disconnect", self._worker_disConn, namespace="/worker")
         self.skt.on("message", self._worker_message, namespace="/worker")
-        # fileManager
-        self.fileDbSettings = file_db
-        self.fMan = nd_file_manager.FileManager(db_host=file_db["host"],
-                                                db_port=file_db["port"],
-                                                db_name=file_db["name"])
+        # workspaceManager
+        self.wsmDbSettings = wsm_db
+        self.fMan = nd_workspace_manager. \
+            WorkspaceManager(db_host=wsm_db["host"],
+                             db_port=wsm_db["port"],
+                             db_name=wsm_db["name"],
+                             files_dir=wsm_db["files"])
         # taskPool
         self.taskPool = nd_task_pool.TaskPool()
 
