@@ -26,7 +26,7 @@ def main():
     db_name = sktSettings.read("WorkspaceManager", "db_name", "str")
     db_host = sktSettings.read("WorkspaceManager", "db_host", "str")
     db_port: int = sktSettings.read("WorkspaceManager", "db_port", "int")
-    print(f"server starts at {conn_host}:{conn_port}")
+    print(f"server is starting at {conn_host}:{conn_port}")
     print(f"redis server: {conn_redis}")
     skt = nd_server_socket.SrvSocket(redis_host=conn_redis,
                                      host=[conn_host, conn_port],

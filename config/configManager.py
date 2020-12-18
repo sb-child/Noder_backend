@@ -85,6 +85,10 @@ class ConfigReader:
         # r = None
         if self._cf.has_option(section, option):
             r = self._cf.get(section, option)
+            if op_type == "int":
+                r = int(r)
+            if op_type == "float":
+                r = float(r)
         else:
             try:
                 r = self._basic[section][option]

@@ -23,8 +23,7 @@ import aiohttp.web
 # import asyncio
 # import re
 import nd_utils
-import nd_msg
-import nd_file_manager
+import nd_user
 import nd_task_pool
 import nd_workspace_manager
 
@@ -45,7 +44,7 @@ class SrvSocket:
         self.r_host = redis_host
         self.id = nd_utils.getRandomStr(32)
         # command executer
-        self.mExec = nd_msg.MsgExec(self.id)
+        # self.mExec = nd_msg.MsgExec(self.id)
         # socket.io events
         # greeter
         self.skt.on("connect", self._greeter_conn, namespace="/greeter")
@@ -68,8 +67,9 @@ class SrvSocket:
                              files_dir=wsm_db["files"])
         # taskPool
         self.taskPool = nd_task_pool.TaskPool()
+        # userManager
+        self.userMan = nd_user.UserManager()
 
-    # -- todo: socket.io events
     # -- user
     async def _user_conn(self, sid, p):
         print("connect")
@@ -118,14 +118,15 @@ class SrvSocket:
         print("")
         # non dict type is not allowed
         if not isinstance(p, dict):
-            await self.skt.disconnect(sid)
+            # await self.skt.disconnect(sid)
             return
-        self.skt.enter_room(sid, "users")
-        self.mExec.executeCmd(p, sid)
 
-    # -- end of socket.io events --
+        self.skt.enter_room(sid, "users")
+        # self.mExec.executeCmd(p, sid)
+
     def run(self):
-        def my_print(_):
+        def my_print(_1):
+            # print(_1)
             pass
 
         print(f"socket.io is running at {self.host[0]}:{self.host[1]}")

@@ -1,5 +1,3 @@
-# coding=utf-8
-
 #  Noder - A node-based editor
 #  Copyright (C) 2020 sbchild
 #
@@ -16,28 +14,6 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import socketio
-import asyncio
-
-sio = socketio.Client()
-
-
-def connect():
-    print('connection established')
-
-
-def my_message(data):
-    print('message received with ', data)
-    sio.sleep(0.5)
-    sio.send({})
-
-
-def disconnect():
-    print('disconnected from server')
-
-
-if __name__ == '__main__':
-    sio.on("connect", connect)
-    sio.on("message", my_message)
-    sio.on("disconnect", disconnect)
-    sio.connect('http://0.0.0.0:37321')
+class UserManager:
+    def __init__(self):
+        pass
