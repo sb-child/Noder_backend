@@ -5,6 +5,8 @@ It is a server for clients(frontend).
 ![alt](readme_imgs/plan.png)
 
 **todo:**  
+> - [ ] rewrite with `golang`
+---
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
 > - [x] replace `WebSocket` to `socket.io`
