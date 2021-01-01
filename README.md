@@ -6,7 +6,8 @@ It is a server for clients(frontend).
 
 **todo:**  
 > - [ ] rewriting `manager` and `worker` with `golang`
-> - [ ] use [gotch](https://github.com/sugarme/gotch) for faster compute
+> - [ ] worker: use [gotch](https://github.com/sugarme/gotch) for faster compute
+> - [ ] use `jsonrpc` for network transfer
 <!-- ---
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
