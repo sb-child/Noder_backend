@@ -5,8 +5,9 @@ It is a server for clients(frontend).
 ![alt](readme_imgs/plan.png)
 
 **todo:**  
-> - [ ] rewrite with `golang`
----
+> - [ ] rewriting `manager` and `worker` with `golang`
+> - [ ] use [gotch](https://github.com/sugarme/gotch) for faster compute
+<!-- ---
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
 > - [x] replace `WebSocket` to `socket.io`
@@ -15,7 +16,7 @@ It is a server for clients(frontend).
 > ...
 > - [ ] code cleanup
 > - [ ] improve performance
-> - [ ] document
+> - [ ] document -->
 
 **License**
 > GPL3
