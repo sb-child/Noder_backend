@@ -18,7 +18,6 @@ from typing import Union, List
 import torch
 import numpy
 from . import ColorModes
-from . import pytorchUtils
 
 
 # todo: Image and ImageLayer types
