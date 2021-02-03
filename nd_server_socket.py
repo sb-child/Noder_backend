@@ -15,6 +15,19 @@
 #
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#      This program is free software: you can redistribute it and/or modify
+#      it under the terms of the GNU General Public License as published by
+#      the Free Software Foundation, either version 3 of the License, or
+#      (at your option) any later version.
+#
+#      This program is distributed in the hope that it will be useful,
+#      but WITHOUT ANY WARRANTY; without even the implied warranty of
+#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#      GNU General Public License for more details.
+#
+#      You should have received a copy of the GNU General Public License
+#      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Union, Dict
 import socketio
@@ -46,10 +59,10 @@ class SrvSocket:
         # command executer
         # self.mExec = nd_msg.MsgExec(self.id)
         # socket.io events
-        # greeter
-        self.skt.on("connect", self._greeter_conn, namespace="/greeter")
-        self.skt.on("disconnect", self._greeter_disConn, namespace="/greeter")
-        self.skt.on("message", self._greeter_message, namespace="/greeter")
+        # # greeter
+        # self.skt.on("connect", self._greeter_conn, namespace="/greeter")
+        # self.skt.on("disconnect", self._greeter_disConn, namespace="/greeter")
+        # self.skt.on("message", self._greeter_message, namespace="/greeter")
         # user
         self.skt.on("connect", self._user_conn, namespace="/user")
         self.skt.on("disconnect", self._user_disConn, namespace="/user")
@@ -96,33 +109,33 @@ class SrvSocket:
     async def _worker_message(self, sid, p: Union[str, bytes, list, dict]):
         pass
 
-    # -- greeter
-    async def _greeter_conn(self, sid, p):
-        print("connect:")
-        print(sid)
-        print(p)
-        print("")
-        await self.skt.send("hello", sid)
-        pass
-
-    async def _greeter_disConn(self, sid):
-        print("disconnect:")
-        print(sid)
-        print("")
-        pass
-
-    async def _greeter_message(self, sid, p: Union[str, bytes, list, dict]):
-        print("message:")
-        print(sid)
-        print(p)
-        print("")
-        # non dict type is not allowed
-        if not isinstance(p, dict):
-            # await self.skt.disconnect(sid)
-            return
-
-        self.skt.enter_room(sid, "users")
-        # self.mExec.executeCmd(p, sid)
+    # # -- greeter
+    # async def _greeter_conn(self, sid, p):
+    #     print("connect:")
+    #     print(sid)
+    #     print(p)
+    #     print("")
+    #     await self.skt.send("hello", sid)
+    #     pass
+    #
+    # async def _greeter_disConn(self, sid):
+    #     print("disconnect:")
+    #     print(sid)
+    #     print("")
+    #     pass
+    #
+    # async def _greeter_message(self, sid, p: Union[str, bytes, list, dict]):
+    #     print("message:")
+    #     print(sid)
+    #     print(p)
+    #     print("")
+    #     # non dict type is not allowed
+    #     if not isinstance(p, dict):
+    #         # await self.skt.disconnect(sid)
+    #         return
+    #
+    #     self.skt.enter_room(sid, "users")
+    #     # self.mExec.executeCmd(p, sid)
 
     def run(self):
         def my_print(_1):

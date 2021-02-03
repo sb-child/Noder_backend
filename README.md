@@ -5,19 +5,19 @@ It is a server for clients(frontend).
 ![alt](readme_imgs/plan.png)
 
 **todo:**  
-> - [ ] rewriting `manager` and `worker` with `golang`
-> - [ ] worker: use [gotch](https://github.com/sugarme/gotch) for faster compute
-> - [ ] use `jsonrpc` for network transfer
-<!-- ---
+> - [ ] ~~rewriting `manager` and `worker` with `golang`.~~
+> - [ ] ~~worker: use [gotch](https://github.com/sugarme/gotch) for faster compute~~
+> - [ ] ~~use `jsonrpc` for network transfer~~
+---
 > - [ ] Preliminary complete `NodeType`
 > - [ ] Preliminary complete `NodeManager`
 > - [x] replace `WebSocket` to `socket.io`
-> - [ ] ~~use `socket.io` to manage users~~   
-> - [ ] communication protocol and user manage  
+> - [ ] ~~use `socket.io` to manage users~~
+> - [ ] communication protocol and user manage
 > ...
 > - [ ] code cleanup
 > - [ ] improve performance
-> - [ ] document -->
+> - [ ] document
 
 **License**
 > GPL3
